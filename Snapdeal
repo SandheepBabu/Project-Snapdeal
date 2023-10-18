@@ -1,0 +1,71 @@
+package SnapdealTest;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.openqa.selenium.Keys;
+
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+import java.util.List;
+
+public class SnapdealTest {
+
+    private WebDriver driver;
+
+    @BeforeMethod
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+    }
+
+    @Test
+    public void Snapdeal() {
+        
+        driver.get("https://www.snapdeal.com/");
+
+        WebElement searchBox = driver.findElement(By.id("inputValEnter"));
+        searchBox.sendKeys("Tshirts");
+        searchBox.sendKeys(Keys.RETURN);
+        
+        WebElement sortDropdown = driver.findElement(By.className("sort-selected"));
+        sortDropdown.click();
+        
+        try 
+        {
+        WebElement priceLowToHighOption = driver.findElement(By.xpath("(//li[@data-index=\"2\"])[2]"));
+        priceLowToHighOption.click();
+        Thread.sleep(5000);
+        
+        List<WebElement> tShirts = driver.findElements(By.cssSelector(".product-tuple-image"));
+        Assert.assertFalse(tShirts.isEmpty(), "No t-shirts found on the page");
+        tShirts.get(0).click();
+        
+        
+            Thread.sleep(5000);
+            WebElement sizeS = driver.findElement(By.cssSelector(".attr-val"));
+            Assert.assertTrue(sizeS.isDisplayed(), "Size 'S' element is not displayed");
+            sizeS.click();
+        
+        	
+                 Thread.sleep(3000);
+                 WebElement addToCartButton = driver.findElement(By.id("add-cart-button-id"));
+                 addToCartButton.click();
+             
+        }   
+        catch(Exception a) {
+        }}
+
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
